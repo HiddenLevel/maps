@@ -51,7 +51,8 @@ class MapboxWebGlPlatform extends MapboxGlPlatform
         ..style.position = 'absolute'
         ..style.top = '0'
         ..style.bottom = '0'
-        ..style.width = '100%';
+        ..style.width = '100%'
+        ..style.height = '100%';
       callback(viewId);
       return _mapElement;
     });
@@ -197,18 +198,18 @@ class MapboxWebGlPlatform extends MapboxGlPlatform
   @override
   Future<bool?> animateCamera(CameraUpdate cameraUpdate,
       {Duration? duration}) async {
-    final cameraOptions = Convert.toCameraOptions(cameraUpdate, _map);
-    final around = getProperty(cameraOptions, 'around');
-    final bearing = getProperty(cameraOptions, 'bearing');
-    final center = getProperty(cameraOptions, 'center');
-    final pitch = getProperty(cameraOptions, 'pitch');
-    final zoom = getProperty(cameraOptions, 'zoom');
+    final cameraOptions = Convert.toCameraOptions(cameraUpdate, _map).jsObject;
+
+    final around = jsify(cameraOptions.around);
+    final bearing = jsify(cameraOptions.bearing);
+    final center = jsify(cameraOptions.center);
+    final pitch = jsify(cameraOptions.pitch);
+    final zoom = jsify(cameraOptions.zoom);
 
     _map.flyTo({
-      if (around != null && around.jsObject != null) 'around': around,
+      if (around != null) 'around': around,
       if (bearing != null) 'bearing': bearing,
-      if (center != null && center.jsObject != null)
-        'center': [center.lng, center.lat],
+      if (center != null) 'center': center,
       if (pitch != null) 'pitch': pitch,
       if (zoom != null) 'zoom': zoom,
       if (duration != null) 'duration': duration.inMilliseconds,
