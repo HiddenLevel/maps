@@ -1,7 +1,7 @@
 part of mapbox_gl_web;
 
 const _mapboxGlCssUrl =
-    'https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.css';
+    "https://api.mapbox.com/mapbox-gl-js/v3.10.0/mapbox-gl.css";
 
 class MapboxWebGlPlatform extends MapboxGlPlatform
     implements MapboxMapOptionsSink {
@@ -71,12 +71,15 @@ class MapboxWebGlPlatform extends MapboxGlPlatform
       _map = MapboxMap(
         MapOptions(
           container: _mapElement,
-          style: 'mapbox://styles/mapbox/streets-v11',
+          style:
+              _creationParams["style"] ?? 'mapbox://styles/mapbox/streets-v11',
           center: LngLat(camera['target'][1], camera['target'][0]),
           zoom: camera['zoom'],
           bearing: camera['bearing'],
           pitch: camera['tilt'],
           preserveDrawingBuffer: true,
+          minPitch: _creationParams["minPitch"],
+          maxPitch: _creationParams["maxPitch"],
         ),
       );
       _map.on('load', _onStyleLoaded);
@@ -200,11 +203,11 @@ class MapboxWebGlPlatform extends MapboxGlPlatform
       {Duration? duration}) async {
     final cameraOptions = Convert.toCameraOptions(cameraUpdate, _map).jsObject;
 
-    final around = jsify(cameraOptions.around);
-    final bearing = jsify(cameraOptions.bearing);
-    final center = jsify(cameraOptions.center);
-    final pitch = jsify(cameraOptions.pitch);
-    final zoom = jsify(cameraOptions.zoom);
+    final around = cameraOptions.around.jsify();
+    final bearing = cameraOptions.bearing.jsify();
+    final center = cameraOptions.center.jsify();
+    final pitch = cameraOptions.pitch.jsify();
+    final zoom = cameraOptions.zoom.jsify();
 
     _map.flyTo({
       if (around != null) 'around': around,
@@ -232,9 +235,7 @@ class MapboxWebGlPlatform extends MapboxGlPlatform
   }
 
   @override
-  Future<void> matchMapLanguageWithDeviceDefault() async {
-    setMapLanguage(ui.window.locale.languageCode);
-  }
+  Future<void> matchMapLanguageWithDeviceDefault() async {}
 
   @override
   Future<void> setMapLanguage(String language) async {
@@ -341,14 +342,22 @@ class MapboxWebGlPlatform extends MapboxGlPlatform
   @override
   Future<void> addImage(String name, Uint8List bytes,
       [bool sdf = false]) async {
-    final photo = decodeImage(bytes)!;
+    final photo = decodeImage(bytes)!.convert(format: Format.uint8);
+
+    late Image imageToLoad;
+    if (photo.format != Format.uint8) {
+      imageToLoad = photo.convert(format: Format.uint8);
+    } else {
+      imageToLoad = photo;
+    }
+
     if (!_map.hasImage(name)) {
       _map.addImage(
         name,
         {
-          'width': photo.width,
-          'height': photo.height,
-          'data': photo.getBytes(),
+          'width': imageToLoad.width,
+          'height': imageToLoad.height,
+          'data': imageToLoad.toUint8List()
         },
         {'sdf': sdf},
       );
@@ -524,8 +533,8 @@ class MapboxWebGlPlatform extends MapboxGlPlatform
     _removeNavigationControl();
     _navigationControl = NavigationControl(NavigationControlOptions(
       showCompass: newShowComapss,
-      showZoom: false,
-      visualizePitch: false,
+      showZoom: true,
+      visualizePitch: true,
     ));
 
     if (newPosition == null) {
@@ -644,7 +653,7 @@ class MapboxWebGlPlatform extends MapboxGlPlatform
 
     try {
       final styleJson = jsonDecode(styleString ?? '');
-      final styleJsObject = jsUtil.jsify(styleJson);
+      final styleJsObject = styleJson.jsify();
       _map.setStyle(styleJsObject);
     } catch (_) {
       _map.setStyle(styleString);
@@ -715,12 +724,13 @@ class MapboxWebGlPlatform extends MapboxGlPlatform
 
   @override
   Future<void> addGeoJsonSource(String sourceId, Map<String, dynamic> geojson,
-      {String? promoteId}) async {
+      {String? promoteId, bool enableLineMetrics = false}) async {
     final data = _makeFeatureCollection(geojson);
     _addedFeaturesByLayer[sourceId] = data;
     _map.addSource(sourceId, {
       "type": 'geojson',
       "data": geojson, // pass the raw string here to avoid errors
+      if (enableLineMetrics) "lineMetrics": true,
       if (promoteId != null) "promoteId": promoteId
     });
   }
@@ -989,6 +999,11 @@ class MapboxWebGlPlatform extends MapboxGlPlatform
   @override
   Future<void> addSource(String sourceId, SourceProperties source) async {
     _map.addSource(sourceId, source.toJson());
+  }
+
+  @override
+  Future<void> setTerrain(TerrainProperties properties) async {
+    _map.setTerrain(properties.toJson());
   }
 
   Future<void> addImageSource(

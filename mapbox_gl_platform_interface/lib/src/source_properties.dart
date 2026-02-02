@@ -7,6 +7,30 @@ abstract class SourceProperties {
   Map<String, dynamic> toJson();
 }
 
+class TerrainProperties implements SourceProperties {
+  final String source;
+  final double? exaggeration;
+
+  const TerrainProperties({
+    required this.source,
+    this.exaggeration,
+  });
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> json = <String, dynamic>{};
+
+    void addIfPresent(String fieldName, dynamic value) {
+      if (value != null) {
+        json[fieldName] = value;
+      }
+    }
+
+    addIfPresent('source', source);
+    addIfPresent('exaggeration', exaggeration);
+    return json;
+  }
+}
+
 class VectorSourceProperties implements SourceProperties {
   /// A URL to a TileJSON resource. Supported protocols are `http:`,
   /// `https:`, and `mapbox://<Tileset ID>`.

@@ -5,32 +5,37 @@
 part of mapbox_gl_platform_interface;
 
 class MapboxStyles {
-  static const String MAPBOX_STREETS = "mapbox://styles/mapbox/streets-v11";
+  static const String MAPBOX_STREETS = "mapbox://styles/mapbox/streets-v12";
 
   /// Outdoors: A general-purpose style tailored to outdoor activities. Using this constant means
   /// your map style will always use the latest version and may change as we improve the style.
-  static const String OUTDOORS = "mapbox://styles/mapbox/outdoors-v11";
+  static const String OUTDOORS = "mapbox://styles/mapbox/outdoors-v12";
 
   /// Light: Subtle light backdrop for data visualizations. Using this constant means your map
   /// style will always use the latest version and may change as we improve the style.
-  static const String LIGHT = "mapbox://styles/mapbox/light-v10";
+  static const String LIGHT = "mapbox://styles/mapbox/light-v11";
 
   /// Empty: Basic empty style
   static const String EMPTY = "mapbox://styles/mapbox/empty-v8";
 
   /// Dark: Subtle dark backdrop for data visualizations. Using this constant means your map style
   /// will always use the latest version and may change as we improve the style.
-  static const String DARK = "mapbox://styles/mapbox/dark-v10";
+  static const String DARK = "mapbox://styles/mapbox/dark-v11";
+
+  static const String STANDARD = "mapbox://styles/mapbox/standard";
 
   /// Satellite: A beautiful global satellite and aerial imagery layer. Using this constant means
   /// your map style will always use the latest version and may change as we improve the style.
   static const String SATELLITE = "mapbox://styles/mapbox/satellite-v9";
 
+  static const String STANDARD_SAT =
+      "mapbox://styles/mapbox/standard-satellite";
+
   /// Satellite Streets: Global satellite and aerial imagery with unobtrusive labels. Using this
   /// constant means your map style will always use the latest version and may change as we
   /// improve the style.
   static const String SATELLITE_STREETS =
-      "mapbox://styles/mapbox/satellite-streets-v11";
+      "mapbox://styles/mapbox/satellite-streets-v12";
 
   /// Traffic Day: Color-coded roads based on live traffic congestion data. Traffic data is currently
   /// available in
@@ -143,7 +148,7 @@ class MinMaxZoomPreference {
   }
 
   @override
-  int get hashCode => hashValues(minZoom, maxZoom);
+  int get hashCode => Object.hash(minZoom, maxZoom);
 
   @override
   String toString() {

@@ -780,6 +780,9 @@ class SymbolLayerProperties implements LayerProperties {
   ///   basic functionality with js, android, ios, macos
   final dynamic visibility;
 
+  final dynamic symbolZOffset;
+  final dynamic symbolElevationReference;
+
   const SymbolLayerProperties({
     this.iconOpacity,
     this.iconColor,
@@ -800,6 +803,8 @@ class SymbolLayerProperties implements LayerProperties {
     this.symbolAvoidEdges,
     this.symbolSortKey,
     this.symbolZOrder,
+    this.symbolZOffset,
+    this.symbolElevationReference,
     this.iconAllowOverlap,
     this.iconIgnorePlacement,
     this.iconOptional,
@@ -860,6 +865,9 @@ class SymbolLayerProperties implements LayerProperties {
       symbolAvoidEdges: changes.symbolAvoidEdges ?? symbolAvoidEdges,
       symbolSortKey: changes.symbolSortKey ?? symbolSortKey,
       symbolZOrder: changes.symbolZOrder ?? symbolZOrder,
+      symbolZOffset: changes.symbolZOffset ?? symbolZOffset,
+      symbolElevationReference:
+          changes.symbolElevationReference ?? symbolElevationReference,
       iconAllowOverlap: changes.iconAllowOverlap ?? iconAllowOverlap,
       iconIgnorePlacement: changes.iconIgnorePlacement ?? iconIgnorePlacement,
       iconOptional: changes.iconOptional ?? iconOptional,
@@ -930,6 +938,8 @@ class SymbolLayerProperties implements LayerProperties {
     addIfPresent('symbol-avoid-edges', symbolAvoidEdges);
     addIfPresent('symbol-sort-key', symbolSortKey);
     addIfPresent('symbol-z-order', symbolZOrder);
+    addIfPresent('symbol-z-offset', symbolZOffset);
+    addIfPresent('symbol-elevation-reference', symbolElevationReference);
     addIfPresent('icon-allow-overlap', iconAllowOverlap);
     addIfPresent('icon-ignore-placement', iconIgnorePlacement);
     addIfPresent('icon-optional', iconOptional);
@@ -991,6 +1001,8 @@ class SymbolLayerProperties implements LayerProperties {
       symbolAvoidEdges: json['symbol-avoid-edges'],
       symbolSortKey: json['symbol-sort-key'],
       symbolZOrder: json['symbol-z-order'],
+      symbolZOffset: json['symbol-z-offset'],
+      symbolElevationReference: json['symbol-elevation-reference'],
       iconAllowOverlap: json['icon-allow-overlap'],
       iconIgnorePlacement: json['icon-ignore-placement'],
       iconOptional: json['icon-optional'],
@@ -1487,6 +1499,10 @@ class LineLayerProperties implements LayerProperties {
   ///   basic functionality with js, android, ios, macos
   final dynamic visibility;
 
+  final dynamic lineZOffset;
+  final dynamic lineElevationReference;
+  final dynamic lineEmissiveStrength;
+
   const LineLayerProperties({
     this.lineOpacity,
     this.lineColor,
@@ -1499,6 +1515,9 @@ class LineLayerProperties implements LayerProperties {
     this.lineDasharray,
     this.linePattern,
     this.lineGradient,
+    this.lineZOffset,
+    this.lineElevationReference,
+    this.lineEmissiveStrength,
     this.lineCap,
     this.lineJoin,
     this.lineMiterLimit,
@@ -1520,6 +1539,11 @@ class LineLayerProperties implements LayerProperties {
       lineDasharray: changes.lineDasharray ?? lineDasharray,
       linePattern: changes.linePattern ?? linePattern,
       lineGradient: changes.lineGradient ?? lineGradient,
+      lineZOffset: changes.lineZOffset ?? lineZOffset,
+      lineElevationReference:
+          changes.lineElevationReference ?? lineElevationReference,
+      lineEmissiveStrength:
+          changes.lineEmissiveStrength ?? lineEmissiveStrength,
       lineCap: changes.lineCap ?? lineCap,
       lineJoin: changes.lineJoin ?? lineJoin,
       lineMiterLimit: changes.lineMiterLimit ?? lineMiterLimit,
@@ -1555,6 +1579,9 @@ class LineLayerProperties implements LayerProperties {
     addIfPresent('line-round-limit', lineRoundLimit);
     addIfPresent('line-sort-key', lineSortKey);
     addIfPresent('visibility', visibility);
+    addIfPresent('line-z-offset', lineZOffset);
+    addIfPresent('line-elevation-reference', lineElevationReference);
+    addIfPresent('line-emissive-strength', lineEmissiveStrength);
     return json;
   }
 
@@ -1571,6 +1598,9 @@ class LineLayerProperties implements LayerProperties {
       lineDasharray: json['line-dasharray'],
       linePattern: json['line-pattern'],
       lineGradient: json['line-gradient'],
+      lineZOffset: json['line-z-offset'],
+      lineElevationReference: json['line-elevation-reference'],
+      lineEmissiveStrength: json['line-emissive-strength'],
       lineCap: json['line-cap'],
       lineJoin: json['line-join'],
       lineMiterLimit: json['line-miter-limit'],

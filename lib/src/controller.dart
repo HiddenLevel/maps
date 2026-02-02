@@ -323,10 +323,10 @@ class MapboxMapController extends ChangeNotifier {
   /// platform side.
   ///
   Future<void> addGeoJsonSource(String sourceId, Map<String, dynamic> geojson,
-      {String? promoteId}) async {
+      {String? promoteId, bool enableLineMetrics = false}) async {
     _disposeGuard();
     await _mapboxGlPlatform.addGeoJsonSource(sourceId, geojson,
-        promoteId: promoteId);
+        promoteId: promoteId, enableLineMetrics: enableLineMetrics);
   }
 
   /// Sets new geojson data to and existing source
@@ -1294,6 +1294,11 @@ class MapboxMapController extends ChangeNotifier {
   Future<void> addSource(String sourceid, SourceProperties properties) async {
     _disposeGuard();
     return _mapboxGlPlatform.addSource(sourceid, properties);
+  }
+
+  Future<void> setTerrain(TerrainProperties properties) async {
+    _disposeGuard();
+    return _mapboxGlPlatform.setTerrain(properties);
   }
 
   /// Add a layer to the map with the given properties

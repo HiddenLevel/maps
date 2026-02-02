@@ -43,6 +43,8 @@ class MapboxMap extends StatefulWidget {
     this.onCameraTrackingChanged,
     this.onCameraIdle,
     this.onMapIdle,
+    this.minPitch = 0,
+    this.maxPitch = 85,
     this.annotationOrder = const [
       AnnotationType.line,
       AnnotationType.symbol,
@@ -124,6 +126,9 @@ class MapboxMap extends StatefulWidget {
 
   /// True if the map view should respond to tilt gestures.
   final bool tiltGesturesEnabled;
+
+  final double minPitch;
+  final double maxPitch;
 
   /// Set to true to forcefully disable/enable if map should respond to double
   /// click to zoom.
@@ -255,6 +260,7 @@ class _MapboxMapState extends State<MapboxMap> {
     assert(
         widget.annotationOrder.toSet().length == widget.annotationOrder.length,
         "annotationOrder must not have duplicate types");
+    print(_MapboxMapOptions.fromWidget(widget).toMap());
     final Map<String, dynamic> creationParams = <String, dynamic>{
       'initialCameraPosition': widget.initialCameraPosition.toMap(),
       'options': _MapboxMapOptions.fromWidget(widget).toMap(),
@@ -262,6 +268,9 @@ class _MapboxMapState extends State<MapboxMap> {
       'onAttributionClickOverride': widget.onAttributionClick != null,
       'dragEnabled': widget.dragEnabled,
       'useHybridCompositionOverride': widget.useHybridCompositionOverride,
+      'minPitch': widget.minPitch,
+      'maxPitch': widget.maxPitch,
+      'style': widget.styleString
     };
     return _mapboxGlPlatform.buildView(
         creationParams, onPlatformViewCreated, widget.gestureRecognizers);
@@ -354,6 +363,8 @@ class _MapboxMapOptions {
     this.compassViewMargins,
     this.attributionButtonPosition,
     this.attributionButtonMargins,
+    this.minPitch,
+    this.maxPitch,
   });
 
   static _MapboxMapOptions fromWidget(MapboxMap map) {
@@ -377,8 +388,13 @@ class _MapboxMapOptions {
       compassViewMargins: map.compassViewMargins,
       attributionButtonPosition: map.attributionButtonPosition,
       attributionButtonMargins: map.attributionButtonMargins,
+      minPitch: map.minPitch,
+      maxPitch: map.maxPitch,
     );
   }
+
+  final double? minPitch;
+  final double? maxPitch;
 
   final bool? compassEnabled;
 
@@ -452,6 +468,9 @@ class _MapboxMapOptions {
     addIfNonNull('zoomGesturesEnabled', zoomGesturesEnabled);
     addIfNonNull('doubleClickZoomEnabled', doubleClickZoomEnabled);
 
+    addIfNonNull('maxPitch', maxPitch);
+    addIfNonNull('minPitch', minPitch);
+
     addIfNonNull('trackCameraPosition', trackCameraPosition);
     addIfNonNull('myLocationEnabled', myLocationEnabled);
     addIfNonNull('myLocationTrackingMode', myLocationTrackingMode?.index);
@@ -462,6 +481,8 @@ class _MapboxMapOptions {
     addIfNonNull('attributionButtonPosition', attributionButtonPosition?.index);
     addIfNonNull(
         'attributionButtonMargins', pointToArray(attributionButtonMargins));
+    optionsMap["pitch"] = 20;
+    optionsMap["bearing"] = -60;
     return optionsMap;
   }
 
