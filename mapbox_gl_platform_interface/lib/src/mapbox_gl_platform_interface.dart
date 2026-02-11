@@ -105,7 +105,7 @@ abstract class MapboxGlPlatform {
   Future<double> getMetersPerPixelAtLatitude(double latitude);
 
   Future<void> addGeoJsonSource(String sourceId, Map<String, dynamic> geojson,
-      {String? promoteId});
+      {String? promoteId, bool enableLineMetrics = false});
 
   Future<void> setGeoJsonSource(String sourceId, Map<String, dynamic> geojson);
 
@@ -181,6 +181,7 @@ abstract class MapboxGlPlatform {
       double? maxzoom});
 
   Future<void> addSource(String sourceId, SourceProperties properties);
+  Future<void> setTerrain(TerrainProperties properties);
 
   Future<String> takeSnapshot(SnapshotOptions snapshotOptions);
 

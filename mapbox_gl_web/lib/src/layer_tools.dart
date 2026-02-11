@@ -7,6 +7,7 @@ const _layoutProperties = {
   "symbol-avoid-edges",
   "symbol-sort-key",
   "symbol-z-order",
+  "symbol-elevation-reference",
   "icon-allow-overlap",
   "icon-ignore-placement",
   "icon-optional",
@@ -51,6 +52,8 @@ const _layoutProperties = {
   "line-round-limit",
   "line-sort-key",
   "fill-sort-key",
+  "line-z-offset",
+  'line-elevation-reference',
 };
 
 bool isLayoutProperty(String property) {

@@ -548,7 +548,7 @@ class MethodChannelMapboxGl extends MapboxGlPlatform {
 
   @override
   Future<void> addGeoJsonSource(String sourceId, Map<String, dynamic> geojson,
-      {String? promoteId}) async {
+      {String? promoteId, bool enableLineMetrics = false}) async {
     await _channel.invokeMethod('source#addGeoJson', <String, dynamic>{
       'sourceId': sourceId,
       'geojson': jsonEncode(geojson),
@@ -771,5 +771,11 @@ class MethodChannelMapboxGl extends MapboxGlPlatform {
     } on PlatformException catch (e) {
       return new Future.error(e);
     }
+  }
+
+  @override
+  Future<void> setTerrain(TerrainProperties properties) {
+    // TODO: implement setTerrain
+    throw UnimplementedError();
   }
 }
